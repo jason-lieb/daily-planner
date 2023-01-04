@@ -1,2 +1,2 @@
-# daily-planner
-Simple daily calendar application powered by jQuery and Bootstrap
+# Daily Planner
+Simple daily calendar application powered by jQuery, Bootstrap, and Day.js
