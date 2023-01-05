@@ -1,11 +1,17 @@
 $(function () {
   init();
 
+  // Event listener for saving content
+  $('.saveBtn').on('click', saveToStorage);
+
   function init() {
-    // Add Background Colors to Time Blocks
+    // Add background colors to time blocks
     colorTimeBlocks();
 
-    // Add Date to top of Calendar
+    // Load saved content
+    readStorage();
+
+    // Add date to top of calendar
     $('#currentDay').text(dayjs(new Date()).format('dddd[,] MMMM D[,] YYYY'))
   }
 
@@ -28,15 +34,27 @@ $(function () {
     }
   }
 
+  function readStorage() {
+    let timeBlocks = $('.time-block');
+    $.each(timeBlocks, (i) => {
+      let id = $(timeBlocks[i]).attr('id');
+      let storedVal = localStorage.getItem(id);
+      if (storedVal !== null) {
+        let timeSlot = $(timeBlocks[i]);
+        let textArea = $(timeSlot.children()[1]);
+        textArea.val(storedVal);
+      };
+    })
+  }
 
-  // TODO: Add a listener for click events on the save button. This code should
-  // use the id in the containing time-block as a key to save the user input in
-  // local storage. HINT: What does `this` reference in the click listener
-  // function? How can DOM traversal be used to get the "hour-x" id of the
-  // time-block containing the button that was clicked? How might the id be
-  // useful when saving the description in local storage?
-  //
-  // TODO: Add code to get any user input that was saved in localStorage and set
-  // the values of the corresponding textarea elements. HINT: How can the id
-  // attribute of each time-block be used to do this?
+  function saveToStorage(event) {
+    let button = $(event.target);
+    if (button.parent().attr('id') === undefined) button = button.parent();
+    // Grab id from parent div
+    let id = button.parent().attr('id');
+    // Grab text from textarea
+    let text = $(button.siblings()[1]).val();
+    // Save text to local storage
+    localStorage.setItem(id, text);
+  }
 });
